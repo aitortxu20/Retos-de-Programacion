@@ -23,7 +23,6 @@ numx = 0
 numy = 0
 operaciones = ["mas", "menos", "por", "entre"]
 jugar = "s"
-tiempo = 8
 
 def generar_numeros(puntuacion):
 
@@ -44,39 +43,44 @@ def generar_numeros(puntuacion):
 
 def llamar_operacion(operaciones, numx, numy):
     operacion = random.choice(operaciones)
-    if operacion == "mas":
-        resultado = numx + numy
-        respuesta = int(input(f"Adivina cuanto es {numx} + {numy} >> "))
-    elif operacion == "menos":
-        resultado = numx - numy
-        respuesta = int(input(f"Adivina cuanto es {numx} - {numy} >> "))
-    elif operacion == "por":
-        resultado = numx * numy
-        respuesta = int(input(f"Adivina cuanto es {numx} * {numy} >> "))
-    elif operacion == "entre":
-        resultado = numx / numy
-        respuesta = int(input(f"Adivina cuanto es {numx} / {numy} >> "))
-    return resultado, respuesta
-
-
-
+    try:
+        if operacion == "mas":
+            resultado = numx + numy
+            respuesta = int(input(f"Adivina cuanto es {numx} + {numy} >> "))
+        elif operacion == "menos":
+            resultado = numx - numy
+            respuesta = int(input(f"Adivina cuanto es {numx} - {numy} >> "))
+        elif operacion == "por":
+            resultado = numx * numy
+            respuesta = int(input(f"Adivina cuanto es {numx} * {numy} >> "))
+        elif operacion == "entre":
+            resultado = numx / numy
+            respuesta = int(input(f"Adivina cuanto es {numx} / {numy} >> "))
+        return resultado, respuesta
+    except:
+        llamar_operacion(operaciones, numx, numy)
 
 
 print("Bienvenido al juego de operaciones matematicas")
 while jugar == "s":
     numx, numy = generar_numeros(puntuacion)
+    tiempo_actual = time.time()
 
-    while tiempo > 0:
-        if tiempo == 8:
-            resultado, respuesta = llamar_operacion(operaciones, numx, numy)
-            print(resultado, respuesta)
-            if respuesta == resultado:
-                puntuacion += 1
-        time.sleep(1)
-        tiempo -= 1
-        if tiempo == 0:
-            print("Se te acabo el tiempo")
-            jugar = input("Quieres volver a jugar? s/n: ").lower()
+    while True:
+
+        if time.time() - tiempo_actual > 3:
+            print("Respondiste pasaados 3 segundos, perdiste :(")
+            break
+        tiempo_actual = time.time()
+
+        resultado, respuesta = llamar_operacion(operaciones, numx, numy)
+        print(resultado, respuesta)
+        if respuesta == resultado:
+            puntuacion += 1
+        #time.sleep(1)
+        #tiempo -= 1
+
+    jugar = input("Quieres volver a jugar? s/n: ").lower()
 
 # Depurar esot del tiempo para que vaya
 
