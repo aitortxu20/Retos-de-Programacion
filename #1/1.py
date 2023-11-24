@@ -30,15 +30,15 @@ def text_to_leet():
         if character in alphabet:
             index = alphabet.index(character.lower())
             character = leet_alphabet[index]
-            leet_text += character
         else:
             try:
                 character = int(character)
                 index = numbers.index(character)
                 character = leet_numbers[index]
-                leet_text += character
             except:
-                leet_text += character
+                pass
+
+        leet_text += character
 
     return leet_text
 
