@@ -1,38 +1,36 @@
 # /*
-#  * Este es un reto especial por Halloween.
-#  * Te encuentras explorando una mansión abandonada llena de habitaciones.
-#  * En cada habitación tendrás que resolver un acertijo para poder avanzar a la siguiente.
-#  * Tu misión es encontrar la habitación de los dulces.
+#  * This is a special challenge for Halloween.
+#  * You find yourself exploring an abandoned mansion full of rooms.
+#  * In each room, you'll have to solve a riddle to advance to the next one.
+#  * Your mission is to find the candy room.
 #  *
-#  * Se trata de implementar un juego interactivo de preguntas y respuestas por terminal.
-#  * (Tienes total libertad para ser creativo con los textos)
+#  * This involves implementing an interactive question-and-answer game via the terminal.
+#  * (You have total freedom to be creative with the texts)
 #  *
-#  * - 🏰 Casa: La mansión se corresponde con una estructura cuadrada 4 x 4
-#  *   que deberás modelar. Las habitaciones de puerta y dulces no tienen enigma.
-#  *   (16 habitaciones, siendo una de entrada y otra donde están los dulces)
-#  *   Esta podría ser una representación:
+#  * - 🏰 House: The mansion corresponds to a 4 x 4 square structure
+#  *   that you should model. Rooms with a door and candy do not have a riddle.
+#  *   (16 rooms, one for entry and one where the candy is located)
+#  *   This could be a representation:
 #  *   🚪⬜️⬜️⬜️
 #  *   ⬜️👻⬜️⬜️
 #  *   ⬜️⬜️⬜️👻
 #  *   ⬜️⬜️🍭⬜️
-#  * - ❓ Enigmas: Cada habitación propone un enigma aleatorio que deberás responder con texto.
-#  *   Si no lo aciertas no podrás desplazarte.
-#  * - 🧭 Movimiento: Si resuelves el enigma se te preguntará a donde quieres desplazarte.
-#  *   (Ejemplo: norte/sur/este/oeste. Sólo deben proporcionarse las opciones posibles)
-#  * - 🍭 Salida: Sales de la casa si encuentras la habitación de los dulces.
-#  * - 👻 (Bonus) Fantasmas: Existe un 10% de que en una habitación aparezca un fantasma y
-#  *   tengas que responder dos preguntas para salir de ella.
+#  * - ❓ Riddles: Each room presents a random riddle that you must answer with text.
+#  *   If you don't solve it, you can't move.
+#  * - 🧭 Movement: If you solve the riddle, you'll be asked where you want to move.
+#  *   (Example: north/south/east/west. Only possible options should be provided)
+#  * - 🍭 Exit: You leave the house if you find the candy room.
+#  * - 👻 (Bonus) Ghosts: There's a 10% chance that a ghost appears in a room and
+#  *   you have to answer two questions to leave.
 #  */
-
-
 
 from preguntas import ENIGMAS
 import random, copy
 import unidecode
 
-PREGUNTAS_HECHAS = []
+ASKED_QUESTIONS = []
 
-def bienvenida():
+def welcome():
     print("""
       ____  _                           _     _                 _          _                              _          _    _       _ _                              
  |  _ \(_)                         (_)   | |               | |        | |                            | |        | |  | |     | | |                             
@@ -44,166 +42,166 @@ def bienvenida():
                                                                                     |___/                                                                   
     """)
 
-def crearTablero():
-    tablero=[]
+def createBoard():
+    board=[]
 
-    tablero = [[0,1,2,3] for _ in range(4)]
-    posicion_puerta = posicionItems()
-    posicion_dulce = posicionItems()
+    board = [[0,1,2,3] for _ in range(4)]
+    door_position = getPositions()
+    candy_position = getPositions()
 
-    if posicion_puerta == posicion_dulce:
-        while posicion_puerta == posicion_dulce:
-            posicion_dulce = posicionItems()
+    if door_position == candy_position:
+        while door_position == candy_position:
+            candy_position = getPositions()
 
-    return tablero, posicion_puerta, posicion_dulce
+    return board, door_position, candy_position
 
-def fantasmas():
-    numero = 0
-    numero_random = random.randint(0, 9)
+def ghosts():
+    number = 0
+    random_number = random.randint(0, 9)
 
-    if numero == numero_random:
-        posicion = []
-        posicion.append(random.randint(0,3))
-        posicion.append(random.randint(0, 3))
-        return posicion
+    if number == random_number:
+        position = []
+        position.append(random.randint(0,3))
+        position.append(random.randint(0, 3))
+        return position
 
-def posicionItems():
-    posicion = []
-    posicion.append(random.randint(0, 3))
-    if posicion[0] == 0 or posicion[0] == 3:
-        posicion.append(random.randint(0, 3))
+def getPositions():
+    position = []
+    position.append(random.randint(0, 3))
+    if position[0] == 0 or position[0] == 3:
+        position.append(random.randint(0, 3))
     else:
-        posicion.append(random.choice([0, 3]))
-    return posicion
+        position.append(random.choice([0, 3]))
+    return position
 
-def mover(movimiento, posicion):
-    if movimiento == "norte" and posicion[0] - 1 >= 0:
-        posicion[0] -= 1
-        return posicion
-    elif movimiento == "sur" and posicion[0] + 1 <= 4:
-        posicion[0] += 1
-        return posicion
-    elif movimiento == "oeste" and posicion[1] -1 >= 0:
-        posicion[1] -= 1
-        return posicion
-    elif movimiento == "este" and posicion[1] + 1 <= 4:
-        posicion[1] += 1
-        return posicion
+def move(direction, position):
+    if direction == "north" and position[0] - 1 >= 0:
+        position[0] -= 1
+        return position
+    elif direction == "south" and position[0] + 1 <= 4:
+        position[0] += 1
+        return position
+    elif direction == "west" and position[1] -1 >= 0:
+        position[1] -= 1
+        return position
+    elif direction == "east" and position[1] + 1 <= 4:
+        position[1] += 1
+        return position
     else:
-        print("El movimiento no es válido")
+        print("Invalid movement")
 
-def comprobarFantasma(lista1, lista2):
-    fantasma = fantasmas()
-    if fantasma != False:
-        if fantasma == lista1 or fantasma == lista2:
-            while fantasma == lista1 or fantasma == lista2:
-                fantasma = fantasmas()
-                comprobarFantasma(lista1, lista2)
-        return fantasma
+def checkGhost(list1, list2):
+    ghost = ghosts()
+    if ghost != False:
+        if ghost == list1 or ghost == list2:
+            while ghost == list1 or ghost == list2:
+                ghost = ghosts()
+                checkGhost(list1, list2)
+        return ghost
 
-def generarEnigma():
-    enigma = random.choice(ENIGMAS)
-    pregunta = enigma['pregunta']
-    if pregunta in PREGUNTAS_HECHAS:
-        while pregunta in PREGUNTAS_HECHAS:
-            enigma = random.choice(ENIGMAS)
-            pregunta = enigma['pregunta']
-    respuesta = enigma['respuesta']
+def generateRiddle():
+    riddle = random.choice(ENIGMAS)
+    question = riddle['pregunta']
+    if question in ASKED_QUESTIONS:
+        while question in ASKED_QUESTIONS:
+            riddle = random.choice(ENIGMAS)
+            question = riddle['pregunta']
+    answer = riddle['respuesta']
 
-    PREGUNTAS_HECHAS.append(pregunta)
-    return pregunta, respuesta
+    ASKED_QUESTIONS.append(question)
+    return question, answer
 
-contador = 0
-def validarEnigma(esFantasma, pos_actual):
-    global contador
-    pregunta, respuesta = generarEnigma()
-    respuesta_jugador = input(f"{pregunta}\n>>> ")
+counter = 0
+def validateRiddle(isGhost, current_position):
+    global counter
+    question, answer = generateRiddle()
+    player_answer = input(f"{question}\n>>> ")
 
-    respuesta = respuesta.lower().strip()
-    respuesta = unidecode.unidecode(respuesta)
-    respuesta_jugador = respuesta_jugador.lower().strip()
-    respuesta_jugador = unidecode.unidecode(respuesta_jugador)
+    answer = answer.lower().strip()
+    answer = unidecode.unidecode(answer)
+    player_answer = player_answer.lower().strip()
+    player_answer = unidecode.unidecode(player_answer)
 
-    if respuesta_jugador == respuesta:
-        if esFantasma == True and contador < 1:
-            print("¡Acertaste la Pregunta! Te queda una más para salir de esta habitación")
-            contador += 1
+    if player_answer == answer:
+        if isGhost == True and counter < 1:
+            print("You got the first question right! You have one more to leave this room")
+            counter += 1
             return True
         else:
-            print("¡Acertaste la Pregunta! Conseguiste salir de esta habitación")
-            crear_tablero[0][pos_actual[0]][pos_actual[1]] = completada
-            dibujarTablero()
-            contador = 0
+            print("You got the question right! You managed to leave this room")
+            createBoard[0][current_position[0]][current_position[1]] = completed
+            drawBoard()
+            counter = 0
 
     else:
-        print("Respuesta incorrecta :( A la próxima será")
+        print("Incorrect answer :( Better luck next time")
         return False
 
-def dibujarTablero():
-    calabaza = "🎃"
-    print(calabaza*6)
-    for elemento in crear_tablero[0]:
-        print(' '.join(elemento))
-    print(calabaza * 6)
+def drawBoard():
+    pumpkin = "🎃"
+    print(pumpkin*6)
+    for element in createBoard[0]:
+        print(' '.join(element))
+    print(pumpkin * 6)
 
-crear_tablero = list(crearTablero())
-tablero = copy.deepcopy(crear_tablero)
-print(crear_tablero[0])
-puerta = "🚪"
-fantasma = "👻"
-dulce_encontrado = "🍭"
-dulce_no_encontrado = "⬜"
-blanco = "⬜"
-completada = "✔️"
+createBoard = list(createBoard())
+board = copy.deepcopy(createBoard)
+print(createBoard[0])
+door = "🚪"
+ghost = "👻"
+found_candy = "🍭"
+not_found_candy = "⬜"
+blank = "⬜"
+completed = "✔️"
 
 n = 0
-for elemento in crear_tablero[n]:
-    for c in elemento:
+for element in createBoard[n]:
+    for c in element:
         if type(c) == int:
-            crear_tablero[0][n][c] = blanco
+            createBoard[0][n][c] = blank
     n += 1
 
-crear_tablero[0][crear_tablero[1][0]][crear_tablero[1][1]]=puerta
-crear_tablero[0][crear_tablero[2][0]][crear_tablero[2][1]] = dulce_no_encontrado
+createBoard[0][createBoard[1][0]][createBoard[1][1]] = door
+createBoard[0][createBoard[2][0]][createBoard[2][1]] = not_found_candy
 
-bienvenida()
-dibujarTablero()
+welcome()
+drawBoard()
 
-posicion_inicial = crear_tablero[1]
+initial_position = createBoard[1]
 
 while True:
 
-    movimiento = input("¿Hacia que dirección quieres moverte?\n>>> ")
-    posicion_actual = mover(movimiento, posicion_inicial)
+    movement = input("Which direction do you want to move?\n>>> ")
+    current_position = move(movement, initial_position)
 
-    while posicion_actual == None or crear_tablero[0][posicion_actual[0]][posicion_actual[1]] == completada:
-        movimiento = input("¿Hacia que dirección quieres moverte?\n>>> ")
-        posicion_actual = mover(movimiento, posicion_inicial)
+    while current_position == None or createBoard[0][current_position[0]][current_position[1]] == completed:
+        movement = input("Which direction do you want to move?\n>>> ")
+        current_position = move(movement, initial_position)
 
-    fantasma1 = comprobarFantasma(crear_tablero[1], crear_tablero[2])
-    fantasma2 = comprobarFantasma(crear_tablero[1], crear_tablero[2])
-    while fantasma1 == fantasma2 and fantasma1 != None and fantasma2 != None:
-        fantasma2 = comprobarFantasma(crear_tablero[1], crear_tablero[2])
+    ghost1 = checkGhost(createBoard[1], createBoard[2])
+    ghost2 = checkGhost(createBoard[1], createBoard[2])
+    while ghost1 == ghost2 and ghost1 != None and ghost2 != None:
+        ghost2 = checkGhost(createBoard[1], createBoard[2])
 
-    posicion_actual = [tablero[0][posicion_actual[0]][posicion_actual[0]], tablero[0][posicion_actual[0]][posicion_actual[1]]]
-    if fantasma1 != None or fantasma2 != None:
-        crear_tablero[0][posicion_actual[0]][posicion_actual[1]] = fantasma
-        dibujarTablero()
-        print("¡Te encontraste un Fantasma! Ahora tendrás que responder dos preguntas para salir de esta habitación.\n")
+    current_position = [board[0][current_position[0]][current_position[0]], board[0][current_position[0]][current_position[1]]]
+    if ghost1 != None or ghost2 != None:
+        createBoard[0][current_position[0]][current_position[1]] = ghost
+        drawBoard()
+        print("You encountered a Ghost! Now you'll have to answer two questions to leave this room.\n")
         for _ in range(2):
-            true_or_false = validarEnigma(True, posicion_actual)
+            true_or_false = validateRiddle(True, current_position)
             if true_or_false == False:
                 break
 
-    elif posicion_actual == crear_tablero[2]:
-        crear_tablero[0][posicion_actual[0]][posicion_actual[1]] = dulce_encontrado
-        dibujarTablero()
-        print("¡Encontraste el dulce! Se acabó el juego.")
+    elif current_position == createBoard[2]:
+        createBoard[0][current_position[0]][current_position[1]] = found_candy
+        drawBoard()
+        print("You found the candy! Game over.")
         break
 
     else:
-        print("Para pasar de habitación tendrás que responder la siguiente pregunta:\n")
-        true_or_false = validarEnigma(False, posicion_actual)
+        print("To move to the next room, you'll have to answer the following question:\n")
+        true_or_false = validateRiddle(False, current_position)
         if true_or_false == False:
             break
 

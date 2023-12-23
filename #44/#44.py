@@ -1,86 +1,84 @@
-# /*
-#  * Crea un juego interactivo por terminal en el que tendrás que adivinar
-#  * el resultado de diferentes
-#  * operaciones matemáticas aleatorias (suma, resta, multiplicación
-#  * o división de dos números enteros).
-#  * - Tendrás 3 segundos para responder correctamente.
-#  * - El juego finaliza si no se logra responder en ese tiempo.
-#  * - Al finalizar el juego debes mostrar cuántos cálculos has acertado.
-#  * - Cada 5 aciertos debes aumentar en uno el posible número de cifras
-#  *   de la operación (cada vez en un operando):
-#  *   - Preguntas 1 a 5: X (entre 0 y 9) operación Y (entre 0 y 9)
-#  *   - Preguntas 6 a 10: XX (entre 0 y 99) operación Y (entre 0 y 9)
-#  *   - Preguntas 11 a 15: XX operación YY
-#  *   - Preguntas 16 a 20: XXX (entre 0 y 999) operación YY
-#  *   ...
-#  */
+# Create an interactive terminal game where you'll need to guess
+# the result of different random mathematical operations (addition, subtraction,
+# multiplication, or division of two integers).
+# - You'll have 3 seconds to answer correctly.
+# - The game ends if the correct answer isn't provided within that time.
+# - At the end of the game, display how many calculations you've guessed correctly.
+# - For every 5 correct answers, increase the potential number of digits
+#   in the operation (each time in one operand):
+#   - Questions 1 to 5: X (between 0 and 9) operation Y (between 0 and 9)
+#   - Questions 6 to 10: XX (between 0 and 99) operation Y (between 0 and 9)
+#   - Questions 11 to 15: XX operation YY
+#   - Questions 16 to 20: XXX (between 0 and 999) operation YY
 
 import time
 import random
 
-puntuacion = 0
-numx = 0
-numy = 0
-operaciones = ["mas", "menos", "por", "entre"]
-jugar = "s"
+score = 0
+digits = [1, 2]
+operators = ["+", "-", "*", "/"]
 
-def generar_numeros(puntuacion):
+print("Welcome to the Math Game!")
 
-    if puntuacion < 6:
-        numx = random.randint(0, 9)
-        numy = random.randint(0, 9)
-    elif puntuacion < 11:
-        numx = random.randint(0, 99)
-        numy = random.randint(0, 9)
-    elif puntuacion < 16:
-        numx = random.randint(0, 99)
-        numy = random.randint(0, 99)
+
+def generate_numbers(score):
+    if score < 5:
+        num1 = random.randint(0, 9)
+        num2 = random.randint(0, 9)
+    elif score < 10:
+        num1 = random.randint(0, 99)
+        num2 = random.randint(0, 9)
+    elif score < 15:
+        num1 = random.randint(0, 99)
+        num2 = random.randint(0, 99)
     else:
-        numx = random.randint(0, 999)
-        numy = random.randint(0, 99)
+        num1 = random.randint(0, 999)
+        num2 = random.randint(0, 99)
 
-    return numx, numy
+    return num1, num2
 
-def llamar_operacion(operaciones, numx, numy):
-    operacion = random.choice(operaciones)
+
+def perform_operation(num1, num2, operator):
     try:
-        if operacion == "mas":
-            resultado = numx + numy
-            respuesta = int(input(f"Adivina cuanto es {numx} + {numy} >> "))
-        elif operacion == "menos":
-            resultado = numx - numy
-            respuesta = int(input(f"Adivina cuanto es {numx} - {numy} >> "))
-        elif operacion == "por":
-            resultado = numx * numy
-            respuesta = int(input(f"Adivina cuanto es {numx} * {numy} >> "))
-        elif operacion == "entre":
-            resultado = numx / numy
-            respuesta = int(input(f"Adivina cuanto es {numx} / {numy} >> "))
-        return resultado, respuesta
-    except:
-        llamar_operacion(operaciones, numx, numy)
+        if operator == "+":
+            result = num1 + num2
+        elif operator == "-":
+            result = num1 - num2
+        elif operator == "*":
+            result = num1 * num2
+        elif operator == "/":
+            result = num1 / num2
+
+        return result
+    except ZeroDivisionError:
+        return None
 
 
-print("Bienvenido al juego de operaciones matematicas")
-while jugar == "s":
-    numx, numy = generar_numeros(puntuacion)
-    tiempo_actual = time.time()
+while True:
+    num1, num2 = generate_numbers(score)
+    operator = random.choice(operators)
+    correct_answer = perform_operation(num1, num2, operator)
+    print(f"What is {num1} {operator} {num2}?")
 
-    while True:
+    start_time = time.time()
+    user_answer = input("Your answer: ")
+    end_time = time.time()
 
-        if time.time() - tiempo_actual > 3:
-            print("Respondiste pasaados 3 segundos, perdiste :(")
-            break
-        tiempo_actual = time.time()
+    if end_time - start_time > 3:
+        print("Time's up!")
+        break
 
-        resultado, respuesta = llamar_operacion(operaciones, numx, numy)
-        print(resultado, respuesta)
-        if respuesta == resultado:
-            puntuacion += 1
-        #time.sleep(1)
-        #tiempo -= 1
+    try:
+        user_answer = int(user_answer)
+        if user_answer == correct_answer:
+            score += 1
+            print("Correct!")
+        else:
+            print("Incorrect!")
+    except ValueError:
+        print("Invalid input. Please enter a number.")
 
-    jugar = input("Quieres volver a jugar? s/n: ").lower()
+print(f"Game over! You got {score} calculations correct.")
 
 
 

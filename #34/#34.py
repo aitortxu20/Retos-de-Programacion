@@ -1,38 +1,38 @@
 # /*
-#  * Crea un programa capaz de interactuar con un fichero TXT.
-#  * IMPORTANTE: El fichero TXT NO debe subirse como parte de la corrección.
-#  * Únicamente el código.
+#  * Create a program capable of interacting with a TXT file.
+#  * IMPORTANT: The TXT file should NOT be uploaded as part of the submission.
+#  * Only the code.
 #  *
-#  * - Si no existe, debe crear un fichero llamado "text.txt".
-#  * - Desde el programa debes ser capaz de introducir texto por consola y guardarlo
-#  *   en una nueva línea cada vez que se pulse el botón "Enter".
-#  * - Si el fichero existe, el programa tiene que dar la opción de seguir escribiendo
-#  *   a continuación o borrar su contenido y comenzar desde el principio.
-#  * - Si se selecciona continuar escribiendo, se tiene que mostrar por consola
-#  *   el texto que ya posee el fichero.
+#  * - If it doesn't exist, it should create a file named "text.txt".
+#  * - The program should allow entering text via the console and save it
+#  *   on a new line each time the "Enter" button is pressed.
+#  * - If the file exists, the program should offer the option to continue writing
+#  *   from where it left off or erase its content and start fresh.
+#  * - If continuing writing is selected, it should display the text already present
+#  *   in the file on the console.
 #  */
 
 try:
     with open("text.txt", "r") as f:
 
-            contenido = f.readlines()
-            print(contenido)
-            opcion = input("El fichero existe. Quieres seguir escribiendo? S/N: ")
-            if opcion == "S":
+        content = f.readlines()
+        print(content)
+        option = input("The file exists. Do you want to continue writing? Y/N: ")
+        if option == "Y":
 
-                with open("text.txt", "a") as f:
+            with open("text.txt", "a") as f:
 
-                    texto = input("Introduce un texto append: ")
-                    f.write(texto)
-                    f.write("\n")
+                text = input("Enter text to append: ")
+                f.write(text)
+                f.write("\n")
 
-            else:
-                with open("text.txt", "w") as f:
-                    texto = input("Introduce un texto write: ")
-                    f.write(texto)
-                    f.write("\n")
-except:
+        else:
+            with open("text.txt", "w") as f:
+                text = input("Enter text to write: ")
+                f.write(text)
+                f.write("\n")
+
+except FileNotFoundError:
     with open("text.txt", "w") as f:
-        texto = input("Introduce un texto excepcion: ")
-        f.write(texto)
-
+        text = input("Enter text (exception): ")
+        f.write(text)

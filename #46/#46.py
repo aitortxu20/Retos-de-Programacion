@@ -1,100 +1,102 @@
-# /*
-#  * Crea un programa que simule la competición de dos coches en una pista.
-#  * - Los dos coches estarán representados por 🚙 y 🚗. Y la meta por 🏁.
-#  * - Cada pista tendrá entre 1 y 3 árboles 🌲 colocados de forma aleatoria.
-#  * - Las dos pistas tendrán una longitud configurable de guiones bajos "_".
-#  * - Los coches comenzarán en la parte derecha de las pistas. Ejemplo:
-#  *   🏁____🌲_____🚙
-#  *   🏁_🌲____🌲___🚗
-#  *
-#  * El juego se desarrolla por turnos de forma automática, y cada segundo
-#  * se realiza una acción sobre los coches (moviéndose a la vez), hasta que
-#  * uno de ellos (o los dos a la vez) llega a la meta.
-#  * - Acciones:
-#  *   - Avanzar entre 1 a 3 posiciones hacia la meta.
-#  *   - Si al avanzar, el coche finaliza en la posición de un árbol,
-#  *     se muestra 💥 y no avanza durante un turno.
-#  *   - Cada turno se imprimen las pistas y sus elementos.
-#  *   - Cuando la carrera finalice, se muestra el coche ganador o el empate.
-#  *
-#  */
+"""
+Create a program that simulates a competition between two cars on a track.
+- Both cars will be represented by 🚙 and 🚗. The finish line will be represented by 🏁.
+- Each track will have between 1 and 3 trees 🌲 randomly placed.
+- Both tracks will have a configurable length of underscores "_".
+- The cars will start on the right side of the tracks. Example:
+    🏁____🌲_____🚙
+    🏁_🌲____🌲___🚗
+
+The game unfolds automatically in turns, and every second an action is taken on the cars (moving at the same time), until one of them (or both) reaches the finish line.
+- Actions:
+  - Move between 1 to 3 positions towards the finish line.
+  - If, while moving, the car ends up in the position of a tree,
+    display 💥 and do not advance for one turn.
+  - Each turn prints the tracks and their elements.
+  - When the race finishes, display the winning car or the tie.
+"""
 
 import random
 import time
 import os
 
-class Coche:
-    def __init__(self, posicion, color):
-        self.posicion = posicion
+
+class Car:
+    def __init__(self, position, color):
+        self.position = position
         self.color = color
-        self.turno = True
-    def mover(self, unidades_movimiento):
-        self.posicion -= unidades_movimiento
+        self.turn = True
 
-class Pista:
-    def __init__(self, tamano_pista):
-        self.meta = 0
-        self.tamano_pista = tamano_pista
-        self.arboles = []
-        self.num_arboles = random.randint(1, 3)
-        for elemento in range(self.num_arboles):
-            self.arboles.append(random.randint(1, self.tamano_pista - 2))
+    def move(self, movement_units):
+        self.position -= movement_units
 
-    def imprimir_pista(self, coche):
-        self.pista = "🏁"
 
-        for i in range(1, self.tamano_pista):
-            if i not in self.arboles and i != coche.posicion:
-                self.pista += '_'
-            elif i == coche.posicion:
-                self.pista += coche.color
+class Track:
+    def __init__(self, track_size):
+        self.finish_line = 0
+        self.track_size = track_size
+        self.trees = []
+        self.num_trees = random.randint(1, 3)
+        for element in range(self.num_trees):
+            self.trees.append(random.randint(1, self.track_size - 2))
+
+    def print_track(self, car):
+        self.track = "🏁"
+
+        for i in range(1, self.track_size):
+            if i not in self.trees and i != car.position:
+                self.track += '_'
+            elif i == car.position:
+                self.track += car.color
             else:
-                self.pista += "🌲"
+                self.track += "🌲"
 
-        if coche.posicion == tamano_pista:
-            self.pista += coche.color
-        if coche.posicion == 0:
-            self.pista = coche.color + self.pista[1:]
+        if car.position == self.track_size:
+            self.track += car.color
+        if car.position == 0:
+            self.track = car.color + self.track[1:]
 
-        if coche.posicion in self.arboles:
-            self.pista = self.pista[0:coche.posicion - 1] + "💥" + self.pista[coche.posicion + 1:]
-            coche.turno = False
-            self.arboles.remove(coche.posicion)
-            print(self.pista)
+        if car.position in self.trees:
+            self.track = self.track[0:car.position - 1] + "💥" + self.track[car.position + 1:]
+            car.turn = False
+            self.trees.remove(car.position)
+            print(self.track)
         else:
-            print(self.pista)
+            print(self.track)
 
-def check_ganador(coche_azul_pos: int, coche_rojo_pos: int):
-    if coche_rojo_pos == 0 and coche_azul_pos == 0:
-        print("Empate!")
-    elif coche_rojo_pos <= 0:
-        print(f"Ganó el {coche_rojo.color}")
-    elif coche_azul_pos <= 0:
-        print(f"Ganó el {coche_azul.color}")
 
-tamano_pista = int(input("Cual quieres que sea el tamaño de la pista: "))
-coche_rojo = Coche(tamano_pista, "🚗")
-coche_azul = Coche(tamano_pista, "🚙")
-pista_rojo = Pista(tamano_pista)
-pista_azul = Pista(tamano_pista)
-pista_rojo.imprimir_pista(coche_rojo)
-pista_azul.imprimir_pista(coche_azul)
+def check_winner(blue_car_pos: int, red_car_pos: int):
+    if red_car_pos == 0 and blue_car_pos == 0:
+        print("It's a tie!")
+    elif red_car_pos <= 0:
+        print(f"{car_red.color} car won!")
+    elif blue_car_pos <= 0:
+        print(f"{car_blue.color} car won!")
 
-while coche_rojo.posicion > 0 and coche_azul.posicion > 0:
+
+track_size = int(input("What should be the track size: "))
+car_red = Car(track_size, "🚗")
+car_blue = Car(track_size, "🚙")
+track_red = Track(track_size)
+track_blue = Track(track_size)
+track_red.print_track(car_red)
+track_blue.print_track(car_blue)
+
+while car_red.position > 0 and car_blue.position > 0:
     time.sleep(0.5)
-    if coche_rojo.turno == True:
-        coche_rojo.mover(random.randint(1, 3))
+    if car_red.turn == True:
+        car_red.move(random.randint(1, 3))
     else:
-        coche_rojo.mover(0)
-        coche_rojo.turno = True
+        car_red.move(0)
+        car_red.turn = True
 
-    if coche_azul.turno == True:
-        coche_azul.mover(random.randint(1, 3))
+    if car_blue.turn == True:
+        car_blue.move(random.randint(1, 3))
     else:
-        coche_azul.mover(0)
-        coche_azul.turno = True
+        car_blue.move(0)
+        car_blue.turn = True
 
     os.system("clear")
-    pista_rojo.imprimir_pista(coche_rojo)
-    pista_azul.imprimir_pista(coche_azul)
-    check_ganador(coche_azul.posicion, coche_rojo.posicion)
+    track_red.print_track(car_red)
+    track_blue.print_track(car_blue)
+    check_winner(car_blue.position, car_red.position)
