@@ -23,13 +23,13 @@ def clima(dias, temperatura, probabilidad):
     variacion = random.choice((0, 1))
     dias_de_lluvia = 0
 
-
     for i in range(1, dias+1):
         if n == n_random:
             if variacion == 0:
                 temperatura += 2
             else:
                 temperatura -= 2
+
         if temperatura > 25 and probabilidad <= 80:
             probabilidad += 20
         elif temperatura > 25:
@@ -40,18 +40,17 @@ def clima(dias, temperatura, probabilidad):
         elif temperatura < 5:
             probabilidad = 0
 
-
         if probabilidad == 100:
             temperatura -= 1
             dias_de_lluvia += 1
 
-
-
         lista_valores.append((temperatura,probabilidad))
         print(f"Dia numero {i}, tempreratura {temperatura} y una probabilidad de lluvia de {probabilidad}%")
+
     print(lista_valores)
     maximo = lista_valores[0][0]
     minimo = lista_valores[0][0]
+
     for max, prob in lista_valores:
         if max > maximo:
             maximo = max
@@ -59,8 +58,6 @@ def clima(dias, temperatura, probabilidad):
             minimo = max
 
     print(f"La temperatura maximo ha sido {maximo}, la minima ha sido {minimo} ha llovido {dias_de_lluvia} dias")
-
-
 
 
 clima(5, -7, 60)

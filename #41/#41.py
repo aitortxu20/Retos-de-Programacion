@@ -112,6 +112,7 @@ def generarEnigma():
 
     PREGUNTAS_HECHAS.append(pregunta)
     return pregunta, respuesta
+
 contador = 0
 def validarEnigma(esFantasma, pos_actual):
     global contador
@@ -137,7 +138,6 @@ def validarEnigma(esFantasma, pos_actual):
     else:
         print("Respuesta incorrecta :( A la próxima será")
         return False
-
 
 def dibujarTablero():
     calabaza = "🎃"

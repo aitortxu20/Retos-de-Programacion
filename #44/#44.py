@@ -82,7 +82,5 @@ while jugar == "s":
 
     jugar = input("Quieres volver a jugar? s/n: ").lower()
 
-# Depurar esot del tiempo para que vaya
-
 
 
