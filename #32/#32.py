@@ -1,22 +1,16 @@
-# /*
-#  * Crea una función que calcule el número de la columna de una hoja de Excel
-#  * teniendo en cuenta su nombre.
-#  * - Las columnas se designan por letras de la "A" a la "Z" de forma infinita.
-#  * - Ejemplos: A = 1, Z = 26, AA = 27, CA = 79.
-#  */
+def excel_column_to_number(column):
+    letters = {chr(i): i - 64 for i in range(65, 91)}
+    result = 0
 
-def columna_excel_a_numero(columna):
-    letras = {chr(i): i - 64 for i in range(65, 91)}
-    resultado = 0
+    for i in range(len(column)):
+        letter = column[len(column) - 1 - i]
+        result += letters[letter] * (26 ** i)
 
-    for i in range(len(columna)):
-        letra = columna[len(columna) - 1 - i]
-        resultado += letras[letra] * (26 ** i)
+    return result
 
-    return resultado
+print(excel_column_to_number("A"))
+print(excel_column_to_number("Z"))
+print(excel_column_to_number("AA"))
+print(excel_column_to_number("BFP"))
 
-print(columna_excel_a_numero("A"))
-print(columna_excel_a_numero("Z"))
-print(columna_excel_a_numero("AA"))
-print(columna_excel_a_numero("BFP"))
 
