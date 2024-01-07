@@ -5,27 +5,18 @@
 #  * - Ejemplos: A = 1, Z = 26, AA = 27, CA = 79.
 #  */
 
-# SIN ACABAR
-def n_columna(nombre):
-    lista_alfabetica = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K","L","M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+def columna_excel_a_numero(columna):
+    letras = {chr(i): i - 64 for i in range(65, 91)}
+    resultado = 0
 
-lista_alfabetica = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K","L","M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-contador=26
-# for elemento in lista_alfabetica:
-#     for elemento2 in lista_alfabetica:
-#         contador+=1
-#         celda=elemento+elemento2
-#         if celda=="AC":
-#             print(contador)
+    for i in range(len(columna)):
+        letra = columna[len(columna) - 1 - i]
+        resultado += letras[letra] * (26 ** i)
 
-columna="AAA"
-for elemento in range(len(columna)):
-    valor=(lista_alfabetica.index(columna[elemento])+1)*26
-    print(valor)
+    return resultado
 
-
-
-
-
-
+print(columna_excel_a_numero("A"))
+print(columna_excel_a_numero("Z"))
+print(columna_excel_a_numero("AA"))
+print(columna_excel_a_numero("BFP"))
 
