@@ -1,15 +1,15 @@
 """
- * Crea un programa que calcule quien gana más partidas al piedra,
- * papel, tijera, lagarto, spock.
- * - El resultado puede ser: "Player 1", "Player 2", "Tie" (empate)
- * - La función recibe un listado que contiene pares, representando cada jugada.
- * - El par puede contener combinaciones de "🗿" (piedra), "📄" (papel),
- *   "✂️" (tijera), "🦎" (lagarto) o "🖖" (spock).
- * - Ejemplo. Entrada: [("🗿","✂️"), ("✂️","🗿"), ("📄","✂️")]. Resultado: "Player 2".
- * - Debes buscar información sobre cómo se juega con estas 5 posibilidades.
+Create a program that calculates who wins more rounds in Rock, Paper, Scissors, Lizard, Spock.
+
+The result can be: "Player 1", "Player 2", "Tie" (draw).
+The function receives a list containing pairs, representing each play.
+The pair can contain combinations of "🗿" (rock), "📄" (paper), "✂️" (scissors), "🦎" (lizard), or "🖖" (spock).
+Example: Input: [("🗿","✂️"), ("✂️","🗿"), ("📄","✂️")]. Result: "Player 2".
+You should look for information on how to play with these 5 possibilities.
 """
 
-list = [("🗿","✂️"), ("✂️","🗿"), ("📄","✂️")]
+list = [("🗿" ,"✂️"), ("✂️" ,"🗿"), (" 📄","✂️")]
+
 
 def game_winner(list):
     player1 = 0
@@ -22,7 +22,7 @@ def game_winner(list):
             player1 += 1
         elif play[1] == "✂️" and play[0] == "📄":
             player2 += 1
-        
+
         elif play[0] == "📄" and play[1] == "🗿":
             player1 += 1
         elif play[1] == "📄" and play[0] == "🗿":
@@ -57,7 +57,7 @@ def game_winner(list):
             player1 += 1
         elif play[1] == "✂️" and play[0] == "🦎":
             player2 += 1
-        
+
         elif play[0] == "🦎" and play[1] == "📄":
             player1 += 1
         elif play[1] == "🦎" and play[0] == "📄":
@@ -84,5 +84,6 @@ def game_winner(list):
         print("Tie")
     else:
         print("Player 2 wins!")
+
 
 game_winner(list)

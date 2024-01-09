@@ -1,10 +1,10 @@
 """
- * Crea una función que reciba dos parámetros para crear una cuenta atrás.
- * - El primero, representa el número en el que comienza la cuenta.
- * - El segundo, los segundos que tienen que transcurrir entre cada cuenta.
- * - Sólo se aceptan números enteros positivos.
- * - El programa finaliza al llegar a cero.
- * - Debes imprimir cada número de la cuenta atrás.
+Create a function that takes two parameters to set up a countdown.
+- The first parameter represents the number from which the countdown begins.
+- The second parameter represents the seconds that should elapse between each count.
+- Only positive integers are accepted.
+- The program terminates when it reaches zero.
+- You should print each number in the countdown.
 """
 
 from time import sleep

@@ -1,20 +1,19 @@
 """
- * Escribe un programa que muestre cómo transcurre un juego de tenis y quién lo ha ganado.
- * El programa recibirá una secuencia formada por "P1" (Player 1) o "P2" (Player 2), según quien
- * gane cada punto del juego.
- * 
- * - Las puntuaciones de un juego son "Love" (cero), 15, 30, 40, "Deuce" (empate), ventaja.
- * - Ante la secuencia [P1, P1, P2, P2, P1, P2, P1, P1], el programa mostraría lo siguiente:
- *   15 - Love
- *   30 - Love
- *   30 - 15
- *   30 - 30
- *   40 - 30
- *   Deuce
- *   Ventaja P1
- *   Ha ganado el P1
- * - Si quieres, puedes controlar errores en la entrada de datos.   
- * - Consulta las reglas del juego si tienes dudas sobre el sistema de puntos.   
+Write a program that shows how a tennis game progresses and who has won. The program will receive a sequence formed by "P1" (Player 1) or "P2" (Player 2), indicating who wins each point of the game.
+
+- The scores in a game are "Love" (zero), 15, 30, 40, "Deuce" (tie), advantage.
+- Given the sequence [P1, P1, P2, P2, P1, P2, P1, P1], the program would display the following:
+  15 - Love
+  30 - Love
+  30 - 15
+  30 - 30
+  40 - 30
+  Deuce
+  Advantage P1
+  Player 1 has won
+
+- If you wish, you can handle errors in the input data.
+- Refer to the rules of the game if you have doubts about the scoring system.
 """
 
 player1 = "P1"
@@ -24,6 +23,7 @@ player2 = "P2"
 player2_points = 0
 
 secuence = ["P1", "P1", "P2", "P2", "P1", "P2", "P1", "P1"]
+
 
 def puntuation(player, player_points):
 
@@ -41,11 +41,10 @@ def puntuation(player, player_points):
         else:
             pass
 
-
         player_game_points.append(player_points)
-    
+
     return player_game_points
-            
+
 
 def compare_game_points(game_points_1, game_points_2):
 
@@ -68,9 +67,11 @@ def compare_game_points(game_points_1, game_points_2):
                 i = "Love"
             elif game_points_2[index] == 0:
                 game_points_2[index] = "Love"
-        
+
             print(f"{i} | {[i for i in game_points_2][index]}")
-        
+
         index += 1
 
-compare_game_points(puntuation(player1, player1_points), puntuation(player2, player2_points))
+
+compare_game_points(puntuation(player1, player1_points),
+                    puntuation(player2, player2_points))

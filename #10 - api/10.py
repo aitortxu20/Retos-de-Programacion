@@ -1,11 +1,10 @@
 """
- * Llamar a una API es una de las tareas más comunes en programación.
- *
- * Implementa una llamada HTTP a una API (la que tú quieras) y muestra su
- * resultado a través de la terminal. Por ejemplo: Pokémon, Marvel...
- *
- * Aquí tienes un listado de posibles APIs: 
- * https://github.com/public-apis/public-apis
+Making an API call is one of the most common tasks in programming.
+
+Implement an HTTP call to an API of your choice and display its result through the terminal. For example: Pokémon, Marvel...
+
+Here is a list of possible APIs you can explore:
+https://github.com/public-apis/public-apis
 """
 
 import requests
