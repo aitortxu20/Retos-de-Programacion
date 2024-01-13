@@ -26,6 +26,8 @@ If you don't guess it, you won't be able to move.
 import random
 import os
 import sys
+import msvcrt
+from time import sleep
 
 BOARD_ROWS = 4
 BOARD_COLUMNS = 4
@@ -90,34 +92,40 @@ def playerPosition():
 
     if firstMove == False:
         currentPosition = doorPosition
-        possibleMoves = None
+        possibleMoves = []
 
     if currentPosition[0] == 0:
-
         if currentPosition[1] == 0:
-            possibleMoves = "[R]ight, [D]own"
+            # Right, Down
+            possibleMoves = ["b'd'", "b's'"]
         elif currentPosition[1] == BOARD_COLUMNS - 1:
-            possibleMoves = "[L]eft, [D]own"
+            # Left, Down
+            possibleMoves = ["b'a'", "b's'"]
         else:
-            possibleMoves = "[L]eft, [R]ight, [D]own"
+            # Left, Right, Down
+            possibleMoves = ["b'a'", "b'd'", "b's'"]
 
     elif currentPosition[0] == BOARD_ROWS - 1:
-
         if currentPosition[1] == 0:
-            possibleMoves = "[R]ight, [U]p"
+            # Right, Up
+            possibleMoves = ["b'd'", "b'w'"]
         elif currentPosition[1] == BOARD_COLUMNS - 1:
-            possibleMoves = "[L]eft, [U]p"
+            # Left, Up
+            possibleMoves = ["b'a'", "b'w'"]
         else:
-            possibleMoves = "[L]eft, [R]ight, [U]p"
+            # Left, Right, Up
+            possibleMoves = ["b'a'", "b'd'", "b'w'"]
 
     else:
-
         if currentPosition[1] == 0:
-            possibleMoves = "[R]ight, [U]p, [D]own"
+            # Right, Up, Down
+            possibleMoves = ["b'd'", "b'w'", "b's'"]
         elif currentPosition[1] == BOARD_COLUMNS - 1:
-            possibleMoves = "[L]eft, [U]p, [D]own"
+            # Left, Up, Down
+            possibleMoves = ["b'a'", "b'w'", "b's'"]
         else:
-            possibleMoves = "[L]eft, [R]ight, [U]p, [D]own"
+            # Left, Right, Up, Down
+            possibleMoves = ["b'a'", "b'd'", "b'w'", "b's'"]
 
 
 def playerMove():
@@ -125,19 +133,25 @@ def playerMove():
 
     playerPosition()
 
-    playerMove = input(f"Where to move {possibleMoves} > ")
-    firstMove = True
+    playerMove = None
+    while playerMove not in possibleMoves:
+        print("Use WASD to move > ")
+        playerMove = str(msvcrt.getch())
+        firstMove = True
 
-    if playerMove == "L":
-        currentPosition[1] -= 1
-    elif playerMove == "R":
-        currentPosition[1] += 1
-    elif playerMove == "U":
-        currentPosition[0] -= 1
-    elif playerMove == "D":
-        currentPosition[0] += 1
+        if playerMove not in possibleMoves:
+            print("You can't move there! ❌")
+        else:
+            if playerMove == "b'a'":
+                currentPosition[1] -= 1
+            elif playerMove == "b'd'":
+                currentPosition[1] += 1
+            elif playerMove == "b'w'":
+                currentPosition[0] -= 1
+            elif playerMove == "b's'":
+                currentPosition[0] += 1
 
-    replaceCell()
+        replaceCell()
 
 
 def askQuestion():
@@ -198,7 +212,7 @@ def replaceCell():
 
     if random.randrange(10) == 0:
 
-        if currentPosition != candyPosition and board[currentPosition[0]][currentPosition[1]] != CHECK_CELL:
+        if currentPosition != candyPosition and board[currentPosition[0]][currentPosition[1]] != CHECK_CELL and board[currentPosition[0]][currentPosition[1]] != DOOR_CELL:
 
             board[currentPosition[0]][currentPosition[1]] = GHOST_CELL
             showBoard(board)
