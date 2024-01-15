@@ -39,16 +39,6 @@ class Track():
     def showTrack(self):
         print("".join(self.track))
 
-    def getCarPosition(self):
-        global carPosition
-
-        if "💥" not in self.track:
-            carPosition = self.track.index(self.car.color)
-        else:
-            carPosition = self.track.index("💥")
-
-        return carPosition
-
     def addTrees(self):
         self.trees = generateTrees()
 
@@ -56,6 +46,8 @@ class Track():
             self.track[treePosition] = "🌲"
 
     def replaceCells(self):
+        carPosition = self.car.getPosition(self)
+        randomMove = self.car.moveCar()
 
         self.track[carPosition] = "_"
         newCarPosition = self.track[carPosition - randomMove]
@@ -69,10 +61,7 @@ class Track():
 
     def checkTrackEnd(self):
 
-        global isWinner
-
         if "🏁" not in self.track:
-            isWinner = True
             compareTracks()
 
 
@@ -80,11 +69,18 @@ class Car():
     def __init__(self, color):
         self.color = color
 
-    def moveCar(self, track):
-        global randomMove
-
+    def getPosition(self, track):
         self.track = track
-        carPosition = self.track.getCarPosition()
+
+        if "💥" not in self.track.track:
+            carPosition = self.track.track.index(self.color)
+        else:
+            carPosition = self.track.track.index("💥")
+
+        return carPosition
+
+    def moveCar(self):
+        carPosition = self.getPosition(self.track)
 
         if self.color not in self.track.track:
             randomMove = 0
@@ -96,7 +92,7 @@ class Car():
             else:
                 randomMove = random.randint(1, 3)
 
-        self.track.replaceCells()
+        return randomMove
 
 
 def showTracks():
@@ -134,18 +130,16 @@ redCarTrack = Track(TRACKLENGTH, Car("🚗"))
 
 
 def startRace():
-    global isWinner
 
     showTracks()
 
     sleep(TURN_DURATION)
     clearScreen()
 
-    isWinner = False
-    while not isWinner:
+    while True:
 
-        blueCarTrack.car.moveCar(blueCarTrack)
-        redCarTrack.car.moveCar(redCarTrack)
+        blueCarTrack.replaceCells()
+        redCarTrack.replaceCells()
 
         showTracks()
 
